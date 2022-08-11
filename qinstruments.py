@@ -301,7 +301,7 @@ class ColdPlate():
         else:
             return response
 
-    def changeTemp(self, value, delta=1):
+    def changeTemp(self, value, delta=1, off_when_done=True, verbose=True):
         '''
         Change the temperature of the ColdPlate, input temperature and delta value in Celsius.
         '''
@@ -324,11 +324,14 @@ class ColdPlate():
 
             # Stop if heating/cooling if the target temperature has been reached.
             if ((temp_actual <= value + delta) and (temp_actual >= value - delta)):
-                print("Temperature Reached: {0} {1}C".format(temp_actual, u"\u00b0"))
-                self.tempOff()
+                if verbose:
+                    print("Temperature Reached: {0} {1}C".format(temp_actual, u"\u00b0"))
+                if off_when_done:
+                    self.tempOff()
                 break
             else:
-                print("Current Temperature: {0} {1}C".format(temp_actual, u"\u00b0"))
+                if verbose:
+                    print("Current Temperature: {0} {1}C".format(temp_actual, u"\u00b0"))
             time.sleep(0.1)
 
     def holdTempWithRuntime(self, value, runtime, verbose=True, delta=1):
@@ -352,12 +355,16 @@ class ColdPlate():
         time_start = time.time()
         i = 1
         while time.time() - time_start < runtime:
-            self.setTempTarget(value)
+            #self.setTempTarget(value)
             if self.getTempActual() < value - delta:
                 print("HERE")
-                self.changeTemp(value)
+                self.changeTemp(value=value, off_when_done=False, verbose=False)
             if verbose and i % 10 == 0:
-                print("\tCurrent Holding Temperature: {0} {1}C".format(self.getTempActual(), u"\u00b0"))
-                print(f"\tTime Left: {runtime - (i * 10)}s")
+                print("\tHolding Temperature: {0} {1}C".format(value, u"\u00b0"))
+                print("\tCurrent Temperature: {0} {1}C".format(self.getTempActual(), u"\u00b0"))
+                print(f"\tTime Left: {runtime - i}s")
             i = i + 1
             time.sleep(1)
+        if verbose:
+            print("\tTurning off temperature controler")
+        self.tempOff()

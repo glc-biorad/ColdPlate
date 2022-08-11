@@ -60,7 +60,17 @@ if __name__ == '__main__':
             coldPlate.tempOn()
             print(f"\tTemperature Control: {coldPlate.getTempStateAsString()}")
         print("Current Temperature: {0} {1}C.".format(coldPlate.getTempActual(), u"\u00b0"))
-        print("Running test on changing the temperature to {0} {1}C".format(30, u"\u00b0"))
-        coldPlate.changeTemp(30)
-        print("Running test on holding the temperature to {0} {1}C for 2 minute".format(35, u"\u00b0"))
-        coldPlate.holdTempWithRuntime(value=35, runtime=120)
+        temp_hold = 32
+        print("Running test on changing the temperature to {0} {1}C".format(temp_hold, u"\u00b0"))
+        coldPlate.changeTemp(temp_hold, off_when_done=False)
+        print("Running test on holding the temperature to {0} {1}C for 1 minute".format(temp_hold, u"\u00b0"))
+        for i in range(6):
+            temp_actual = coldPlate.getTempActual()
+            print("\tHolding Temperature: {0} {1}C".format(temp_hold, u"\u00b0"))
+            print("\tCurrent Temperature: {0} {1}C".format(temp_actual, u"\u00b0"))
+            print(f"\tTime Left: {60 - (i * 10)}s")
+            time.sleep(10)
+        coldPlate.tempOff()
+        temp_hold = 30
+        print("Running test on holding the temperature to {0} {1}C for 2 minute".format(temp_hold, u"\u00b0"))
+        coldPlate.holdTempWithRuntime(value=temp_hold, runtime=120)
