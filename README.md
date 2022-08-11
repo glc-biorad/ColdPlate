@@ -5,7 +5,7 @@ ColdPlate "Chiller" definition and testing
 Currently is capable of testing the initialization and temperature control of the ColdPlate "Chiller"
 
 # Commands Overview:
-- Initialization
+- # Initialization
   - getVersion: returns the current firmware version number.
   - getDescription: returns the current model information.
   - version: returns the current model information followed by the version number.
@@ -22,7 +22,7 @@ Currently is capable of testing the initialization and temperature control of th
   - setBuzzer: lets the buzzer beep for the given time in milliseconds.
   - enableBootScreen: permanent activation of the boot screen startup text.
   - disableBootScreen: permanent deactivation of the boot screen startup text.
-- Temperature Control
+- # Temperature Control
   - tempOn: activates the temperature control and starts heating/cooling
   - tempOff: switches off the temperature control and stops heating/cooling
   - getTempState: returns the state of the temperature function.
